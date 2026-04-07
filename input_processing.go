@@ -3,6 +3,10 @@ package main
 import "strings"
 
 func cleanInput(text string) []string {
+	if text == "" {
+		return []string{}
+	}
+
 	wsCleanedString := strings.Trim(text, " ")
 
 	stringContents := []string{}
