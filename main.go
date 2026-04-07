@@ -10,12 +10,15 @@ func main() {
 	newScan := bufio.NewScanner(os.Stdin)
 
 	for {
-		shellPrompt("Pokedex>")
+		shellPrompt("Pokedex >")
 		str, err := inputReader(*newScan)
 		if err != nil {
-			fmt.Printf("error reading the input: %v", err)
+			fmt.Printf("Error: %v", err)
 		}
-		fmt.Println(str)
+
+		cleanInput := cleanInput(str)
+
+		fmt.Printf("Your command was: %s\n", cleanInput[0])
 	}
 }
 
