@@ -37,13 +37,4 @@ func commandHelp() error {
 	return nil
 }
 
-func helpText(supportedCommands map[string]command) string {
-	hstr := []byte{}
 
-	for k, v := range supportedCommands {
-		s := fmt.Sprintf("%s: %s\n", k, v.description)
-		hstr = fmt.Append(hstr, s)
-	}
-
-	return string(hstr)
-}
