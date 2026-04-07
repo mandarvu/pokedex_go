@@ -2,8 +2,14 @@ package main
 
 import (
 	"fmt"
+	"net/url"
 	"os"
 )
+
+type config struct {
+	nextURL url.URL
+	prevURL url.URL
+}
 
 var supportedCommands map[string]command = map[string]command{
 	"exit": {
@@ -21,16 +27,16 @@ var supportedCommands map[string]command = map[string]command{
 type command struct {
 	name        string
 	description string
-	callback    func() error
+	callback    func(config) error
 }
 
-func commandExit() error {
+func commandExit(c config) error {
 	fmt.Println("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 	return nil
 }
 
-func commandHelp() error {
+func commandHelp(c config) error {
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
 
