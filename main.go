@@ -18,6 +18,10 @@ func main() {
 
 		str := newScan.Text()
 
+		if len(str) == 0 {
+			continue
+		}
+
 		cleanedInput := cleanInput(str)
 		command := cleanedInput[0]
 
@@ -29,7 +33,6 @@ func main() {
 		} else {
 			fmt.Println("Unknown command")
 		}
-
 	}
 }
 
