@@ -22,6 +22,11 @@ var supportedCommands map[string]command = map[string]command{
 		description: "Displays a help message",
 		callback:    commandHelp,
 	},
+	"map": {
+		name:        "map",
+		description: "Returns a location list",
+		callback:    commandMap,
+	},
 }
 
 type command struct {
@@ -43,4 +48,5 @@ func commandHelp(c config) error {
 	return nil
 }
 
-
+func commandMap(c config) error {
+}
