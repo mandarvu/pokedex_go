@@ -22,11 +22,7 @@ func main() {
 	}
 }
 
-func inputReader(scanner bufio.Scanner) (string, error) {
-	if !scanner.Scan() {
-		return "", fmt.Errorf("could not read user input")
 	}
-	return scanner.Text(), nil
 }
 
 func shellPrompt(PS1 string) {
