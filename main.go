@@ -13,7 +13,7 @@ func main() {
 		prompt("Pokedex >")
 
 		if !newScan.Scan() {
-			commandExit()
+			commandExit(&conf)
 		}
 
 		str := newScan.Text()
@@ -26,7 +26,7 @@ func main() {
 		command := cleanedInput[0]
 
 		if comm, ok := supportedCommands[command]; ok {
-			comm.callback()
+			comm.callback(&conf)
 			if command == "help" {
 				fmt.Printf("\n%s", helpText(supportedCommands))
 			}
