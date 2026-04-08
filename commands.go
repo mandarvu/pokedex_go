@@ -1,14 +1,15 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/url"
 	"os"
 )
 
 type config struct {
-	nextURL url.URL
-	prevURL url.URL
+	NextURL string `json:"next"`
+	PrevURL string `json:"previous"`
 }
 
 var supportedCommands map[string]command = map[string]command{
@@ -32,16 +33,16 @@ var supportedCommands map[string]command = map[string]command{
 type command struct {
 	name        string
 	description string
-	callback    func(config) error
+	callback    func(*config) error
 }
 
-func commandExit(c config) error {
+func commandExit(c *config) error {
 	fmt.Println("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 	return nil
 }
 
-func commandHelp(c config) error {
+func commandHelp(c *config) error {
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
 
