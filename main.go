@@ -6,8 +6,15 @@ import (
 	"os"
 )
 
+const pokeAPIBaseURL = "https://pokeapi.co/api/v2/"
+
 func main() {
 	newScan := bufio.NewScanner(os.Stdin)
+
+	conf := config{
+		NextURL: "",
+		PrevURL: "",
+	}
 
 	for {
 		prompt("Pokedex >")

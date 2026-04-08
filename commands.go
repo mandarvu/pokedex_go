@@ -3,7 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"net/url"
+	"io"
+	"net/http"
 	"os"
 )
 
@@ -49,5 +50,45 @@ func commandHelp(c *config) error {
 	return nil
 }
 
-func commandMap(c config) error {
+func commandMap(c *config) error {
+	locAreaListEndpoint := pokeAPIBaseURL + "location-area/"
+
+	if c.NextURL == "" {
+		body, err := getResponseFromURL(locAreaListEndpoint)
+		if err != nil {
+			return err
+		}
+
+		fmt.Println(body)
+		json.Unmarshal([]byte(body), c)
+	} else {
+		body, err := getResponseFromURL(c.NextURL)
+		if err != nil {
+			return err
+		}
+
+		fmt.Println(body)
+		json.Unmarshal([]byte(body), c)
+	}
+	return nil
+}
+
+func getResponseFromURL(u string) (string, error) {
+	res, err := http.Get(u)
+	if err != nil {
+		return "", fmt.Errorf("could Not GET response from URL %s: %v", u, err)
+	}
+
+	body, err := io.ReadAll(res.Body)
+	res.Body.Close()
+
+	if res.StatusCode > 299 {
+		return "", fmt.Errorf("response failed with status code: %d and\nbody: %sn", res.StatusCode, body)
+	}
+
+	if err != nil {
+		return "", fmt.Errorf("%v", err)
+	}
+
+	return string(body), nil
 }
