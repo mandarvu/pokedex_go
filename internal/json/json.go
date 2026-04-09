@@ -26,7 +26,7 @@ func GetLocationAreaData(url string) (LocationAreaResult, error) {
 		return LocationAreaResult{}, err
 	}
 
-	err = json.Unmarshal([]byte(body), &laResult)
+	err = json.Unmarshal(body, &laResult)
 	if err != nil {
 		return LocationAreaResult{}, err
 	}
@@ -44,22 +44,22 @@ func GetLocationAreaList(l LocationAreaResult) []string {
 	return outputString
 }
 
-func GetResponseFromURL(u string) (string, error) {
+func GetResponseFromURL(u string) ([]byte, error) {
 	res, err := http.Get(u)
 	if err != nil {
-		return "", fmt.Errorf("could Not GET response from URL %s: %v", u, err)
+		return []byte{}, fmt.Errorf("could Not GET response from URL %s: %v", u, err)
 	}
 
 	body, err := io.ReadAll(res.Body)
 	res.Body.Close()
 
 	if res.StatusCode > 299 {
-		return "", fmt.Errorf("response failed with status code: %d and\nbody: %sn", res.StatusCode, body)
+		return []byte{}, fmt.Errorf("response failed with status code: %d and\nbody: %sn", res.StatusCode, body)
 	}
 
 	if err != nil {
-		return "", fmt.Errorf("%v", err)
+		return []byte{}, fmt.Errorf("%v", err)
 	}
 
-	return string(body), nil
+	return body, nil
 }
