@@ -4,14 +4,14 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-)
 
-const pokeAPIBaseURL = "https://pokeapi.co/api/v2/"
+	"github.com/mandarvu/pokedex_go/internal/commands"
+)
 
 func main() {
 	newScan := bufio.NewScanner(os.Stdin)
 
-	conf := config{
+	conf := commands.Config{
 		NextURL: "",
 		PrevURL: "",
 	}
@@ -20,7 +20,7 @@ func main() {
 		prompt("Pokedex >")
 
 		if !newScan.Scan() {
-			commandExit(&conf)
+			commands.CommandExit(&conf)
 		}
 
 		str := newScan.Text()
@@ -32,10 +32,10 @@ func main() {
 		cleanedInput := cleanInput(str)
 		command := cleanedInput[0]
 
-		if comm, ok := supportedCommands[command]; ok {
-			comm.callback(&conf)
+		if comm, ok := commands.SupportedCommands[command]; ok {
+			comm.Callback(&conf)
 			if command == "help" {
-				fmt.Printf("\n%s", helpText(supportedCommands))
+				fmt.Printf("\n%s", commands.HelpText(commands.SupportedCommands))
 			}
 		} else {
 			fmt.Println("Unknown command")
@@ -45,15 +45,4 @@ func main() {
 
 func prompt(PS1 string) {
 	fmt.Fprint(os.Stdout, PS1+" ")
-}
-
-func helpText(supportedCommands map[string]command) string {
-	hstr := []byte{}
-
-	for k, v := range supportedCommands {
-		s := fmt.Sprintf("%s: %s\n", k, v.description)
-		hstr = fmt.Append(hstr, s)
-	}
-
-	return string(hstr)
 }

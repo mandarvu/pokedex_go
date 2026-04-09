@@ -1,4 +1,5 @@
-package main
+// Package commands
+package commands
 
 import (
 	"encoding/json"
@@ -8,49 +9,51 @@ import (
 	"os"
 )
 
-type config struct {
+const pokeAPIBaseURL = "https://pokeapi.co/api/v2/"
+
+type Config struct {
 	NextURL string `json:"next"`
 	PrevURL string `json:"previous"`
 }
 
-var supportedCommands map[string]command = map[string]command{
+var SupportedCommands map[string]Command = map[string]Command{
 	"exit": {
 		name:        "exit",
 		description: "Exit the Pokedex",
-		callback:    commandExit,
+		Callback:    CommandExit,
 	},
 	"help": {
 		name:        "help",
 		description: "Displays a help message",
-		callback:    commandHelp,
+		Callback:    CommandHelp,
 	},
 	"map": {
 		name:        "map",
 		description: "Returns a location list",
-		callback:    commandMap,
+		Callback:    CommandMap,
 	},
 }
 
-type command struct {
+type Command struct {
 	name        string
 	description string
-	callback    func(*config) error
+	Callback    func(*Config) error
 }
 
-func commandExit(c *config) error {
+func CommandExit(c *Config) error {
 	fmt.Println("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 	return nil
 }
 
-func commandHelp(c *config) error {
+func CommandHelp(c *Config) error {
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
 
 	return nil
 }
 
-func commandMap(c *config) error {
+func CommandMap(c *Config) error {
 	locAreaListEndpoint := pokeAPIBaseURL + "location-area/"
 
 	if c.NextURL == "" {
