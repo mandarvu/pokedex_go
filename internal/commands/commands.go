@@ -4,12 +4,18 @@ package commands
 import (
 	"fmt"
 	"os"
+
+	ijson "github.com/mandarvu/pokedex_go/internal/json"
 )
 
 const (
 	pokeAPIBaseURL       = "https://pokeapi.co/api/v2/"
 	locationAreaEndpoint = "location-area/"
+	pokemonEndpoint      = "pokemon/"
+	catchThreshold       = 50
 )
+
+var Pokedex map[string]ijson.Pokemon = map[string]ijson.Pokemon{}
 
 type Config struct {
 	NextURL string `json:"next"`
@@ -41,6 +47,11 @@ var SupportedCommands map[string]Command = map[string]Command{
 		name:        "explore",
 		description: "Returns a list of pokemon in the given area",
 		Callback:    CommandExplore,
+	},
+	"catch": {
+		name:        "catch",
+		description: "Try to catch a pokemon",
+		Callback:    CommandCatch,
 	},
 }
 
