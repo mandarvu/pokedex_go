@@ -1,3 +1,4 @@
+// Package json (used as ijson to signify internal nature of this package)
 package json
 
 import (
@@ -42,8 +43,6 @@ func GetLocationAreaList(l LocationAreaResult) []string {
 
 	return outputString
 }
-
-
 
 func GetResponseFromURL(u string) (string, error) {
 	res, err := http.Get(u)
