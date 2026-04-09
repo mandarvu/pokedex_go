@@ -6,6 +6,9 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
+
+	cache "github.com/mandarvu/pokedex_go/internal/pokecache"
 )
 
 type LocationAreaResult struct {
@@ -18,10 +21,12 @@ type LocationAreaResult struct {
 	} `json:"results"`
 }
 
+var CachedData cache.Cache = cache.NewCache(5 * time.Millisecond)
+
 func GetLocationAreaData(url string) (LocationAreaResult, error) {
 	laResult := LocationAreaResult{}
 
-	body, err := GetResponseFromURL(url)
+	body, err := GetResponseFromURL(url, &CachedData)
 	if err != nil {
 		return LocationAreaResult{}, err
 	}
@@ -44,7 +49,11 @@ func GetLocationAreaList(l LocationAreaResult) []string {
 	return outputString
 }
 
-func GetResponseFromURL(u string) ([]byte, error) {
+func GetResponseFromURL(u string, cachedData *cache.Cache) (string, error) {
+	if data, ok := cachedData.Get(u); ok {
+		return string(data), nil
+	}
+
 	res, err := http.Get(u)
 	if err != nil {
 		return []byte{}, fmt.Errorf("could Not GET response from URL %s: %v", u, err)
@@ -61,5 +70,7 @@ func GetResponseFromURL(u string) ([]byte, error) {
 		return []byte{}, fmt.Errorf("%v", err)
 	}
 
-	return body, nil
+	cachedData.Add(u, body)
+
+	return string(body), nil
 }
