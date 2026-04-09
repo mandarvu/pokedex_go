@@ -58,6 +58,11 @@ var SupportedCommands map[string]Command = map[string]Command{
 		description: "Get information about a caught pokemon",
 		Callback:    CommandInspect,
 	},
+	"pokedex": {
+		name:        "pokedex",
+		description: "List all the caught pokemon",
+		Callback:    CommandPokedex,
+	},
 }
 
 type Command struct {
