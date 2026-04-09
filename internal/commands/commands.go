@@ -2,11 +2,10 @@
 package commands
 
 import (
-	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
 	"os"
+
+	ijson "github.com/mandarvu/pokedex_go/internal/json"
 )
 
 const pokeAPIBaseURL = "https://pokeapi.co/api/v2/"
@@ -29,8 +28,13 @@ var SupportedCommands map[string]Command = map[string]Command{
 	},
 	"map": {
 		name:        "map",
-		description: "Returns a location list",
+		description: "Returns a next location list",
 		Callback:    CommandMap,
+	},
+	"mapb": {
+		name:        "mapb",
+		description: "Returns a previous location list",
+		Callback:    CommandMapb,
 	},
 }
 
@@ -57,41 +61,58 @@ func CommandMap(c *Config) error {
 	locAreaListEndpoint := pokeAPIBaseURL + "location-area/"
 
 	if c.NextURL == "" {
-		body, err := getResponseFromURL(locAreaListEndpoint)
+		body, err := ijson.GetLocationAreaData(locAreaListEndpoint)
 		if err != nil {
 			return err
 		}
 
-		fmt.Println(body)
-		json.Unmarshal([]byte(body), c)
+		c.NextURL = body.Next
+		c.PrevURL = body.Previous
+
+		printList(ijson.GetLocationAreaList(body))
+
 	} else {
-		body, err := getResponseFromURL(c.NextURL)
+		body, err := ijson.GetLocationAreaData(c.NextURL)
 		if err != nil {
 			return err
 		}
 
-		fmt.Println(body)
-		json.Unmarshal([]byte(body), c)
+		c.NextURL = body.Next
+		c.PrevURL = body.Previous
+		printList(ijson.GetLocationAreaList(body))
 	}
 	return nil
 }
 
-func getResponseFromURL(u string) (string, error) {
-	res, err := http.Get(u)
-	if err != nil {
-		return "", fmt.Errorf("could Not GET response from URL %s: %v", u, err)
+func CommandMapb(c *Config) error {
+	locAreaListEndpoint := pokeAPIBaseURL + "location-area/"
+
+	if c.PrevURL == "" {
+		body, err := ijson.GetLocationAreaData(locAreaListEndpoint)
+		if err != nil {
+			return err
+		}
+
+		c.NextURL = body.Next
+		c.PrevURL = body.Previous
+
+		printList(ijson.GetLocationAreaList(body))
+
+	} else {
+		body, err := ijson.GetLocationAreaData(c.PrevURL)
+		if err != nil {
+			return err
+		}
+
+		c.NextURL = body.Next
+		c.PrevURL = body.Previous
+		printList(ijson.GetLocationAreaList(body))
 	}
+	return nil
+}
 
-	body, err := io.ReadAll(res.Body)
-	res.Body.Close()
-
-	if res.StatusCode > 299 {
-		return "", fmt.Errorf("response failed with status code: %d and\nbody: %sn", res.StatusCode, body)
+func printList(list []string) {
+	for _, item := range list {
+		fmt.Println(item)
 	}
-
-	if err != nil {
-		return "", fmt.Errorf("%v", err)
-	}
-
-	return string(body), nil
 }
