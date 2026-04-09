@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/mandarvu/pokedex_go/internal/commands"
+	"github.com/mandarvu/pokedex_go/internal/input"
 )
 
 func main() {
@@ -29,7 +30,7 @@ func main() {
 			continue
 		}
 
-		cleanedInput := cleanInput(str)
+		cleanedInput := input.CleanInput(str)
 		command := cleanedInput[0]
 
 		if comm, ok := commands.SupportedCommands[command]; ok {

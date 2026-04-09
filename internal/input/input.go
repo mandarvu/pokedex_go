@@ -1,8 +1,8 @@
-package main
+package input
 
 import "strings"
 
-func cleanInput(text string) []string {
+func CleanInput(text string) []string {
 	if text == "" {
 		return []string{}
 	}
