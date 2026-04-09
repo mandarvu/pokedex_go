@@ -22,6 +22,7 @@ func CommandCatch(c *Config, arguments []string) error {
 
 	if math.Abs(r*100+(float64(body.BaseExperience)/69)) > catchThreshold {
 		fmt.Println(arguments[0], " was caught!")
+		fmt.Println("You may now inspect it with the inspect command.")
 		Pokedex[body.Name] = body
 	} else {
 		fmt.Println(arguments[0], " escaped!")
