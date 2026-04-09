@@ -21,7 +21,7 @@ func main() {
 		prompt("Pokedex >")
 
 		if !newScan.Scan() {
-			commands.CommandExit(&conf)
+			commands.CommandExit(&conf, []string{})
 		}
 
 		str := newScan.Text()
@@ -31,10 +31,16 @@ func main() {
 		}
 
 		cleanedInput := input.CleanInput(str)
+
+		arguments := []string{}
 		command := cleanedInput[0]
 
+		if len(cleanedInput) > 1 {
+			arguments = cleanedInput[1:]
+		}
+
 		if comm, ok := commands.SupportedCommands[command]; ok {
-			comm.Callback(&conf)
+			comm.Callback(&conf, arguments)
 			if command == "help" {
 				fmt.Printf("\n%s", commands.HelpText(commands.SupportedCommands))
 			}

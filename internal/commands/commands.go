@@ -6,7 +6,10 @@ import (
 	"os"
 )
 
-const pokeAPIBaseURL = "https://pokeapi.co/api/v2/"
+const (
+	pokeAPIBaseURL       = "https://pokeapi.co/api/v2/"
+	locationAreaEndpoint = "location-area/"
+)
 
 type Config struct {
 	NextURL string `json:"next"`
@@ -34,21 +37,26 @@ var SupportedCommands map[string]Command = map[string]Command{
 		description: "Returns a previous location list",
 		Callback:    CommandMapb,
 	},
+	"explore": {
+		name:        "explore",
+		description: "Returns a list of pokemon in the given area",
+		Callback:    CommandExplore,
+	},
 }
 
 type Command struct {
 	name        string
 	description string
-	Callback    func(*Config) error
+	Callback    func(*Config, []string) error
 }
 
-func CommandExit(c *Config) error {
+func CommandExit(c *Config, arguments []string) error {
 	fmt.Println("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 	return nil
 }
 
-func CommandHelp(c *Config) error {
+func CommandHelp(c *Config, arguments []string) error {
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
 

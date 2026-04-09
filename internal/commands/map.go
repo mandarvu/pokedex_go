@@ -2,8 +2,8 @@ package commands
 
 import ijson "github.com/mandarvu/pokedex_go/internal/json"
 
-func CommandMap(c *Config) error {
-	locAreaListEndpoint := pokeAPIBaseURL + "location-area/"
+func CommandMap(c *Config, arguments []string) error {
+	locAreaListEndpoint := pokeAPIBaseURL + locationAreaEndpoint
 
 	if c.NextURL == "" {
 		body, err := ijson.GetLocationAreaData(locAreaListEndpoint)
@@ -29,8 +29,8 @@ func CommandMap(c *Config) error {
 	return nil
 }
 
-func CommandMapb(c *Config) error {
-	locAreaListEndpoint := pokeAPIBaseURL + "location-area/"
+func CommandMapb(c *Config, arguments []string) error {
+	locAreaListEndpoint := pokeAPIBaseURL + locationAreaEndpoint
 
 	if c.PrevURL == "" {
 		body, err := ijson.GetLocationAreaData(locAreaListEndpoint)

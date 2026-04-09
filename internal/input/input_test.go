@@ -39,7 +39,7 @@ func TestCleanInput(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		actual := cleanInput(tc.input)
+		actual := CleanInput(tc.input)
 		if !reflect.DeepEqual(actual, tc.expected) {
 			t.Errorf("TEST: %s FAILED:\ncleanInput(%q) = %q; expected %q", tc.name, tc.input, actual, tc.expected)
 		}
