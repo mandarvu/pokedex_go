@@ -4,8 +4,6 @@ package commands
 import (
 	"fmt"
 	"os"
-
-	ijson "github.com/mandarvu/pokedex_go/internal/json"
 )
 
 const pokeAPIBaseURL = "https://pokeapi.co/api/v2/"
@@ -54,60 +52,6 @@ func CommandHelp(c *Config) error {
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
 
-	return nil
-}
-
-func CommandMap(c *Config) error {
-	locAreaListEndpoint := pokeAPIBaseURL + "location-area/"
-
-	if c.NextURL == "" {
-		body, err := ijson.GetLocationAreaData(locAreaListEndpoint)
-		if err != nil {
-			return err
-		}
-
-		c.NextURL = body.Next
-		c.PrevURL = body.Previous
-
-		printList(ijson.GetLocationAreaList(body))
-
-	} else {
-		body, err := ijson.GetLocationAreaData(c.NextURL)
-		if err != nil {
-			return err
-		}
-
-		c.NextURL = body.Next
-		c.PrevURL = body.Previous
-		printList(ijson.GetLocationAreaList(body))
-	}
-	return nil
-}
-
-func CommandMapb(c *Config) error {
-	locAreaListEndpoint := pokeAPIBaseURL + "location-area/"
-
-	if c.PrevURL == "" {
-		body, err := ijson.GetLocationAreaData(locAreaListEndpoint)
-		if err != nil {
-			return err
-		}
-
-		c.NextURL = body.Next
-		c.PrevURL = body.Previous
-
-		printList(ijson.GetLocationAreaList(body))
-
-	} else {
-		body, err := ijson.GetLocationAreaData(c.PrevURL)
-		if err != nil {
-			return err
-		}
-
-		c.NextURL = body.Next
-		c.PrevURL = body.Previous
-		printList(ijson.GetLocationAreaList(body))
-	}
 	return nil
 }
 
