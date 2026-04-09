@@ -49,9 +49,9 @@ func GetLocationAreaList(l LocationAreaResult) []string {
 	return outputString
 }
 
-func GetResponseFromURL(u string, cachedData *cache.Cache) (string, error) {
+func GetResponseFromURL(u string, cachedData *cache.Cache) ([]byte, error) {
 	if data, ok := cachedData.Get(u); ok {
-		return string(data), nil
+		return data, nil
 	}
 
 	res, err := http.Get(u)
@@ -72,5 +72,5 @@ func GetResponseFromURL(u string, cachedData *cache.Cache) (string, error) {
 
 	cachedData.Add(u, body)
 
-	return string(body), nil
+	return body, nil
 }
